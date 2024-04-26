@@ -1,0 +1,120 @@
+        String greeting = "Hello" + ", ";
+        System.out.println(greeting.indexOf("sky")); //result -1
+        System.out.println(greeting.repeat(5)); //Hello, Hello, ...
+        System.out.println(greeting.length());//7
+        System.out.println(greeting.replace('l', 'b'));//Hebbo,
+        System.out.println(greeting.replace("ello", "aboba")); //Haboba,
+        System.out.println(greeting.toUpperCase()); //HELLO,
+
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try{
+            FileWriter fw = new FileWriter("message.txt");
+            fw.write("Cat/Meow/2\nDog/Woof/10");
+            fw.append("\nAAAAAA");
+            fw.close();
+            FileReader fr = new FileReader("message.txt");
+            int data = fr.read();
+            StringBuilder text = new StringBuilder();
+            while(data != -1){
+                text.append((char)data);
+                data = fr.read();
+            }
+            System.out.println(text);
+            fr.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+}
+import java.util.ArrayList;
+public class Subject implements Cloneable {
+    private String title;
+    private Teacher teacher;
+    private ArrayList<Student> students;
+
+    public Subject(String title, Teacher teacher) {
+        this.title = title;
+        this.teacher = teacher;
+        students = new ArrayList<>();
+    }
+
+    public void addStudent(Student s) {
+        students.add(s);
+    }
+
+    public void classroom() {
+        int quantity = students.size();
+        System.out.printf("| Teacher: " + teacher.personData() + "|\n");
+        for (int i = 0; i < quantity; i++) {
+            System.out.printf(students.get(i).personData() + "|");
+            if (i % 3 == 0) {
+                System.out.println("\n");
+            }
+        }
+    }
+
+    @Override
+    protected Object clone() {
+        try {
+            Subject clonedSubject = (Subject) super.clone();
+            clonedSubject.teacher = (Teacher) this.teacher.clone();
+            clonedSubject.students = new ArrayList<>();
+            for (Student student : this.students) {
+                clonedSubject.students.add((Student) student.clone());
+            }
+            return clonedSubject;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // This should not happen if Teacher and Student classes properly implement Cloneable
+        }
+    }
+
+}
+public class Student extends Person implements Cloneable{
+    public Student(String name, String lastname){
+        setName(name);
+        setLastName(lastname);
+    }
+    @Override
+    protected Object clone() {
+        return super.clone();
+    }
+}
+public class Teacher extends Person implements Cloneable{
+    Teacher(String name, String lastname){
+        setName(name);
+        setLastName(lastname);
+    }
+
+    @Override
+    protected Object clone() {
+        return super.clone();
+    }
+}
+public class Person implements Cloneable{
+    private String name;
+    private String lastname;
+
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setLastName(String lastname){
+        this.lastname = lastname;
+    }
+    public String personData(){
+        return name + " " + lastname;
+    }
+    protected Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Can't happen
+        }
+    }
+}
